@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask import Flask, jsonify, request
 import pandas as pd
 from sentiment_analysis import analyze_sentiment
@@ -37,7 +36,7 @@ def dashboard_data():
 
 if __name__ == "__main__":
     app.run(debug=False)
-=======
+
 from amazon_scraper import AmazonReviewScraper
 from flipkart_scraper import FlipkartReviewScraper
 
@@ -62,5 +61,3 @@ flip.close()
 print("\nFLIPKART REVIEWS:")
 for r in flipkart_reviews:
     print(r)
-
->>>>>>> 8e8769ad90f8a24f4d35c328cfc6750ce45cf86b

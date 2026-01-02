@@ -1,0 +1,40 @@
+/* ---------------- RESET & GLOBAL STYLES ---------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Ensure app takes full screen space */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  background: #0f2027; /* fallback background if gradient doesn't cover */
+  overflow-x: hidden;  /* prevent horizontal scroll */
+}
+
+/* Override any template flex defaults */
+body {
+  display: block !important;
+}
+
+/* Remove default link styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Smooth scrolling for scrollable areas (like review list) */
+.review-list ul {
+  scroll-behavior: smooth;
+}
+
+/* Optional: improve scrollbar appearance globally */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #14b8a6;
+  border-radius: 3px;
+}

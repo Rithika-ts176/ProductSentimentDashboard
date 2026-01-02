@@ -1,36 +1,18 @@
-import pandas as pd
+# sentiment_analysis.py
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-# Load reviews
-df = pd.read_csv("sample_reviews.csv")
+analyzer = SentimentIntensityAnalyzer()
 
-# Simple word lists
-positive_words = [
-    "good", "great", "excellent", "amazing", "fantastic",
-    "love", "loved", "smooth", "best", "awesome", "perfect"
-]
+def analyze_sentiment(text: str) -> str:
+    if not text or str(text).strip().lower() in ["none", "nan"]:
+        return "neutral"
 
-negative_words = [
-    "bad", "poor", "worst", "disappointed", "heating",
-    "drains", "slow", "issue", "problem", "expensive"
-]
+    scores = analyzer.polarity_scores(str(text))
+    compound = scores["compound"]
 
-def analyze_sentiment(text):
-    text = text.lower()
-    pos_count = sum(word in text for word in positive_words)
-    neg_count = sum(word in text for word in negative_words)
-
-    if pos_count > neg_count:
-        return "Positive"
-    elif neg_count > pos_count:
-        return "Negative"
+    if compound >= 0.05:
+        return "positive"
+    elif compound <= -0.05:
+        return "negative"
     else:
-        return "Neutral"
-
-# Apply sentiment
-df["Sentiment"] = df["Review_Text"].apply(analyze_sentiment)
-
-# Save output
-df.to_csv("sample_reviews_sentiment.csv", index=False)
-
-print("✅ Sentiment analysis completed!")
-print(df[["Review_Text", "Sentiment"]])
+        return "neutral"

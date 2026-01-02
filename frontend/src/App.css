@@ -1,0 +1,114 @@
+/* RESET & GLOBAL STYLES */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* PAGE CONTAINER */
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  padding: 0 20px;
+}
+
+/* CARD */
+.card {
+  background: #f9fafb;
+  width: 100%;
+  max-width: 480px;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+/* HEADINGS */
+.card h1 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #0f2027;
+}
+.subtitle {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 25px;
+}
+
+/* INPUT */
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+input[type="text"]:focus {
+  border-color: #14b8a6;
+  outline: none;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #14b8a6;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {
+  background: #0d9488;
+}
+
+/* REVIEW LIST */
+.review-list {
+  margin-top: 30px;
+  text-align: left;
+}
+.review-list h2 {
+  font-size: 1.4rem;
+  color: #0f2027;
+  margin-bottom: 10px;
+}
+.review-list ul {
+  list-style-type: none;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+.review-list li {
+  background: #e0f2f1;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border-left: 4px solid #14b8a6;
+  font-size: 14px;
+  color: #0f2027;
+}
+.review-list ul::-webkit-scrollbar {
+  width: 6px;
+}
+.review-list ul::-webkit-scrollbar-thumb {
+  background-color: #14b8a6;
+  border-radius: 3px;
+}
+
+/* CHART IMAGES */
+.card img {
+  margin-top: 20px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}

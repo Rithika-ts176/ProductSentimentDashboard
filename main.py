@@ -1,63 +1,49 @@
-from flask import Flask, jsonify, request
-import pandas as pd
-from sentiment_analysis import analyze_sentiment
-review=input("Enter product review:")
-result= analyze_sentiment(review)
-print("Sentiment",result)
+from flask import Flask, render_template, request
+from amazon_scraper import AmazonReviewScraper
+from flipkart_scraper import FlipkartReviewScraper
+import csv
+from flask import Response
+
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return jsonify({"message": "Backend API is running"})
+def analyze_sentiment(text):
+    text = text.lower()
+    if any(w in text for w in ["good", "great", "excellent", "amazing"]):
+        return "Positive"
+    elif any(w in text for w in ["bad", "poor", "worst", "heating"]):
+        return "Negative"
+    else:
+        return "Neutral"
 
-@app.route("/reviews", methods=["GET"])
-def get_reviews():
-    df = pd.read_csv("sample_reviews_sentiment.csv")
-    return jsonify(df.to_dict(orient="records"))
+MOCK_REVIEWS = [
+    {"review": "Amazing performance and battery life"},
+    {"review": "Camera is good but heating issue"},
+    {"review": "Worth the price"},
+]
 
-@app.route("/analyze", methods=["POST"])
-def analyze():
-    data = request.json
-    text = data.get("review")
+@app.route("/", methods=["GET", "POST"])
+def index():
+    reviews = []
+    platform = ""
+    mode = ""
 
-    result = analyze_sentiment(text)
-    return jsonify({
-        "review": text,
-        "sentiment": result
-    })
+    if request.method == "POST":
+        platform = request.form["platform"]
+        mode = request.form["mode"]
 
-@app.route("/dashboard-data", methods=["GET"])
-def dashboard_data():
-    df = pd.read_csv("sample_reviews_sentiment.csv")
+        if mode == "mock":
+            reviews = MOCK_REVIEWS
+        else:
+            url = request.form["url"]
+            scraper = AmazonReviewScraper() if platform == "amazon" else FlipkartReviewScraper()
+            reviews = scraper.get_reviews(url)
+            scraper.close()
 
-    summary = df["sentiment"].value_counts().to_dict()
-    return jsonify(summary)
+        for r in reviews:
+            r["sentiment"] = analyze_sentiment(r["review"])
+
+    return render_template("index.html", reviews=reviews, platform=platform, mode=mode)
 
 if __name__ == "__main__":
     app.run(debug=False)
-
-from amazon_scraper import AmazonReviewScraper
-from flipkart_scraper import FlipkartReviewScraper
-
-# ---------------- AMAZON ----------------
-amazon_url = "https://www.amazon.in/product-reviews/B0C7S5H7L3"
-
-amazon = AmazonReviewScraper()
-amazon_reviews = amazon.get_reviews(amazon_url, max_pages=2)
-amazon.close()
-
-print("\nAMAZON REVIEWS:")
-for r in amazon_reviews:
-    print(r)
-
-# ---------------- FLIPKART ----------------
-flipkart_url = "https://www.flipkart.com/product-reviews/XYZ"
-
-flip = FlipkartReviewScraper()
-flipkart_reviews = flip.get_reviews(flipkart_url, max_pages=2)
-flip.close()
-
-print("\nFLIPKART REVIEWS:")
-for r in flipkart_reviews:
-    print(r)

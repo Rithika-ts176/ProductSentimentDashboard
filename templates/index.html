@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Sentiment Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h2>Product Sentiment Dashboard</h2>
+
+<form method="POST">
+    <input type="text" name="url" placeholder="Enter product URL">
+    <br><br>
+
+    <select name="platform">
+        <option value="amazon">Amazon</option>
+        <option value="flipkart">Flipkart</option>
+    </select>
+
+    <br><br>
+
+    <select name="mode">
+        <option value="mock">Mock Mode (Demo Safe)</option>
+        <option value="live">Live Scraping</option>
+    </select>
+
+    <br><br>
+    <button type="submit">Analyze</button>
+</form>
+
+<hr>
+
+{% if reviews %}
+<h3>Results</h3>
+
+<ul>
+{% for r in reviews %}
+    <li>{{ r.review }} — <b>{{ r.sentiment }}</b></li>
+{% endfor %}
+</ul>
+
+<canvas id="sentimentChart" width="300"></canvas>
+
+<script>
+const data = {
+    labels: ["Positive", "Negative", "Neutral"],
+    datasets: [{
+        data: [
+            {{ reviews|selectattr("sentiment","equalto","Positive")|list|length }},
+            {{ reviews|selectattr("sentiment","equalto","Negative")|list|length }},
+            {{ reviews|selectattr("sentiment","equalto","Neutral")|list|length }}
+        ]
+    }]
+};
+
+new Chart(document.getElementById("sentimentChart"), {
+    type: "pie",
+    data: data
+});
+</script>
+
+{% elif platform %}
+<p><b>No reviews found.</b></p>
+{% endif %}
+</body>
+</html>

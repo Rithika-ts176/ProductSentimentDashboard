@@ -1,20 +1,16 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.options import Options
-from selenium.webdriver.edge.service import Service
 import time
 
 class AmazonReviewScraper:
     def __init__(self):
         options = Options()
-        options.use_chromium = True
-        # options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         options.add_argument("--window-size=1920,1080")
+        # options.add_argument("--headless")  # optional
 
-        service = Service(r"E:\edge_driver\msedgedriver.exe")
-
-        self.driver = webdriver.Edge(service=service, options=options)
+        self.driver = webdriver.Edge(options=options)
 
     def get_reviews(self, url, max_pages=2):
         self.driver.get(url)
@@ -53,7 +49,6 @@ class AmazonReviewScraper:
                     "review": text
                 })
 
-            # Next page
             try:
                 next_btn = self.driver.find_element(By.XPATH, "//li[@class='a-last']/a")
                 next_btn.click()
@@ -65,5 +60,3 @@ class AmazonReviewScraper:
 
     def close(self):
         self.driver.quit()
-
-
